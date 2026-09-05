@@ -1,0 +1,123 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Sri Annai Precast</title>
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">SA</div>
+            <div>
+                <h2>Sri Annai</h2>
+                <span>Precast admin</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Main navigation">
+            <p class="nav-label">Workspace</p>
+            <a href="{% url 'dashboard' %}" class="nav-item active"><span class="nav-icon">D</span> Dashboard</a>
+            <a href="#" class="nav-item"><span class="nav-icon">P</span> Products</a>
+            <a href="#" class="nav-item"><span class="nav-icon">C</span> Customers</a>
+            <a href="#" class="nav-item"><span class="nav-icon">I</span> Inquiries</a>
+            <a href="#" class="nav-item"><span class="nav-icon">A</span> Analytics</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="help-panel">
+                <span class="help-kicker">Need a hand?</span>
+                <strong>Review your latest leads</strong>
+            </div>
+            <a href="{% url 'logout' %}" class="logout-btn"><span>↗</span> Log out</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div>
+                <p class="eyebrow">Monday, operations overview</p>
+                <h1>Good morning, {{ request.user.username }}.</h1>
+                <p class="header-copy">Here is what is happening across your store today.</p>
+            </div>
+            <div class="admin-profile">
+                <div class="profile-icon">{{ request.user.username|first|upper }}</div>
+                <div>
+                    <strong>{{ request.user.username }}</strong>
+                    <span>Administrator</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="stats-grid" aria-label="Business summary">
+            <div class="stat-card accent-teal">
+                <div class="stat-content"><span>Total customers</span><h2>{{ total_users }}</h2><small>Registered accounts</small></div>
+                <div class="stat-icon">C</div>
+            </div>
+            <div class="stat-card accent-green">
+                <div class="stat-content"><span>Verified customers</span><h2>{{ verified_users }}</h2><small>Email verified</small></div>
+                <div class="stat-icon">V</div>
+            </div>
+            <div class="stat-card accent-amber">
+                <div class="stat-content"><span>Products</span><h2>{{ total_products }}</h2><small>In your catalogue</small></div>
+                <div class="stat-icon">P</div>
+            </div>
+            <div class="stat-card accent-coral">
+                <div class="stat-content"><span>Order inquiries</span><h2>{{ total_inquiries }}</h2><small>Customer requests</small></div>
+                <div class="stat-icon">I</div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div><p class="section-kicker">Customer growth</p><h2>Recent customers</h2><p>Latest accounts joining your store</p></div>
+                    <a href="#" class="view-link">View all <span>→</span></a>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Customer</th><th>Email</th><th>Status</th></tr></thead>
+                        <tbody>
+                            {% for customer in recent_users %}
+                            <tr>
+                                <td><div class="person-cell"><span class="table-avatar">{{ customer.username|first|upper }}</span><strong>{{ customer.username }}</strong></div></td>
+                                <td>{{ customer.email }}</td>
+                                <td>{% if customer.is_email_verified %}<span class="status verified">Verified</span>{% else %}<span class="status pending">Pending</span>{% endif %}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="empty">No customers yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div><p class="section-kicker">Sales pipeline</p><h2>Recent inquiries</h2><p>Latest requests from customers</p></div>
+                    <a href="#" class="view-link">View all <span>→</span></a>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Inquiry</th><th>Customer</th><th>Status</th></tr></thead>
+                        <tbody>
+                            {% for inquiry in recent_inquiries %}
+                            <tr>
+                                <td><strong class="inquiry-id">{{ inquiry.inquiry_id }}</strong><small>{{ inquiry.created_at|date:"d M Y" }}</small></td>
+                                <td>{{ inquiry.customer_name }}</td>
+                                <td><span class="status {{ inquiry.status }}">{{ inquiry.get_status_display }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="empty">No inquiries yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
