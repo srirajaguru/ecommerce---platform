@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | Sri Annai Precast</title>
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="wordmark" href="{% url 'home' %}">
+            <span class="wordmark-mark">SA</span>
+            <span><strong>Sri Annai</strong><small>PRECAST SYSTEMS</small></span>
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a href="{% url 'home' %}#products">Products</a>
+            <a href="{% url 'home' %}#standard">Why us</a>
+            {% if user.is_authenticated %}
+                <a class="nav-action" href="{% url 'logout' %}">Sign out</a>
+            {% else %}
+                <a class="nav-action" href="{% url 'login' %}">Sign in</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <section class="cart-page">
+            <p class="eyebrow">What we do</p>
+            <h1>Services built around the specification.</h1>
+            <div class="cart-list">
+                <div class="cart-row">
+                    <div><h2>Product guidance</h2><p>We help you select the right cover size, material, and load capacity for your project.</p></div>
+                    <strong>01</strong>
+                </div>
+                <div class="cart-row">
+                    <div><h2>Reliable supply</h2><p>Consistent precast production and clear availability for projects that need dependable delivery.</p></div>
+                    <strong>02</strong>
+                </div>
+                <div class="cart-row">
+                    <div><h2>Project support</h2><p>From initial enquiry to final order details, our team keeps the process practical and straightforward.</p></div>
+                    <strong>03</strong>
+                </div>
+            </div>
+            <p class="cart-note"><a class="button button-primary" href="{% url 'home' %}#products">View products <span aria-hidden="true">&#8594;</span></a></p>
+        </section>
+    </main>
+</body>
+</html>

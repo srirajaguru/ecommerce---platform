@@ -20,6 +20,10 @@
 
         <nav class="site-nav" aria-label="Primary navigation">
             <a href="#solutions">Solutions</a>
+            <a href="#products">Products</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'cart:detail' %}">Cart</a>
+            {% endif %}
             <a href="#standard">Why us</a>
             {% if user.is_authenticated %}
                 <a class="nav-action" href="{% url 'logout' %}">Sign out</a>
@@ -77,6 +81,64 @@
                 <h2>Infrastructure that earns its place.</h2>
             </div>
             <p>From specification to supply, we make durable precast components that keep projects moving and maintenance predictable.</p>
+        </section>
+
+        <section class="product-showcase" id="products">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Available now</p>
+                    <h2>Built for the work ahead.</h2>
+                </div>
+                <p>Choose a cover, add it to your cart, or move straight to review when you are ready to buy.</p>
+            </div>
+
+            {% if products %}
+                <div class="product-grid">
+                    {% for product in products %}
+                        <article class="product-card">
+                            <div class="product-image">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                {% else %}
+                                    <span>{{ product.material|default:'SFRC' }}</span>
+                                    <strong>{{ product.product_code }}</strong>
+                                {% endif %}
+                            </div>
+                            <div class="product-card-body">
+                                <div class="product-card-title">
+                                    <h3>{{ product.name }}</h3>
+                                    <span>{{ product.product_code }}</span>
+                                </div>
+                                <p>{{ product.description|default:'Reliable precast performance for demanding access points.' }}</p>
+                                <dl class="product-specs">
+                                    {% if product.size %}<div><dt>Size</dt><dd>{{ product.size }}</dd></div>{% endif %}
+                                    {% if product.load_capacity %}<div><dt>Load</dt><dd>{{ product.load_capacity }}</dd></div>{% endif %}
+                                    <div><dt>Material</dt><dd>{{ product.material }}</dd></div>
+                                </dl>
+                                <div class="product-purchase">
+                                    <strong>{% if product.price %}₹{{ product.price|floatformat:2 }}{% else %}Price on request{% endif %}</strong>
+                                    {% if user.is_authenticated %}
+                                        <div class="product-actions">
+                                            <form method="post" action="{% url 'cart:add' product.id %}">
+                                                {% csrf_token %}
+                                                <button class="button button-secondary" type="submit">Add to cart</button>
+                                            </form>
+                                            <form method="post" action="{% url 'cart:buy_now' product.id %}">
+                                                {% csrf_token %}
+                                                <button class="button button-primary" type="submit">Buy now <span aria-hidden="true">&#8594;</span></button>
+                                            </form>
+                                        </div>
+                                    {% else %}
+                                        <a class="button button-primary" href="{% url 'login' %}?next={% url 'home' %}#products">Sign in to buy <span aria-hidden="true">&#8594;</span></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-products">New products are being prepared. Please check back soon.</div>
+            {% endif %}
         </section>
     </main>
 
