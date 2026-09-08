@@ -156,3 +156,7 @@ MAILERS = {
 }
 
 DEFAULT_FROM_EMAIL = "srirajaguruskms10@gmail.com"
+COMPANY_WHATSAPP_NUMBER = os.getenv(
+    'COMPANY_WHATSAPP_NUMBER',
+    '918344318967'
+)
