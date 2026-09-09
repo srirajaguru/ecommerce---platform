@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add product | Sri Annai Precast</title>
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><div class="brand-mark">SA</div><div><h2>Sri Annai</h2><span>Precast admin</span></div></div>
+        <nav class="sidebar-nav" aria-label="Main navigation">
+            <p class="nav-label">Workspace</p>
+            <a href="{% url 'dashboard' %}" class="nav-item"><span class="nav-icon">D</span> Dashboard</a>
+            <a href="{% url 'dashboard_products' %}" class="nav-item active"><span class="nav-icon">P</span> Products</a>
+            <a href="{% url 'dashboard_customers' %}" class="nav-item"><span class="nav-icon">C</span> Customers</a>
+            <a href="{% url 'dashboard_inquiries' %}" class="nav-item"><span class="nav-icon">I</span> Inquiries</a>
+            <a href="{% url 'dashboard_analytics' %}" class="nav-item"><span class="nav-icon">A</span> Analytics</a>
+        </nav>
+        <div class="sidebar-bottom"><a href="{% url 'logout' %}" class="logout-btn"><span>↗</span> Log out</a></div>
+    </aside>
+    <main class="main-content">
+        <header class="top-header"><div><p class="eyebrow">Catalogue</p><h1>Add product</h1><p class="header-copy">Create a new product for your store catalogue.</p></div></header>
+        <section class="dashboard-card form-card">
+            <form method="post" enctype="multipart/form-data" class="product-form">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="form-grid">
+                    {% for field in form %}
+                        <div class="form-field{% if field.name == 'description' %} form-field-wide{% endif %}">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% for error in field.errors %}<small class="form-error">{{ error }}</small>{% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="form-actions"><a href="{% url 'dashboard_products' %}" class="button-secondary-link">Cancel</a><button type="submit" class="dashboard-action">Save product</button></div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

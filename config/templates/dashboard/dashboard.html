@@ -21,10 +21,10 @@
         <nav class="sidebar-nav" aria-label="Main navigation">
             <p class="nav-label">Workspace</p>
             <a href="{% url 'dashboard' %}" class="nav-item active"><span class="nav-icon">D</span> Dashboard</a>
-            <a href="#" class="nav-item"><span class="nav-icon">P</span> Products</a>
-            <a href="#" class="nav-item"><span class="nav-icon">C</span> Customers</a>
-            <a href="#" class="nav-item"><span class="nav-icon">I</span> Inquiries</a>
-            <a href="#" class="nav-item"><span class="nav-icon">A</span> Analytics</a>
+            <a href="{% url 'dashboard_products' %}" class="nav-item"><span class="nav-icon">P</span> Products</a>
+            <a href="{% url 'dashboard_customers' %}" class="nav-item"><span class="nav-icon">C</span> Customers</a>
+            <a href="{% url 'dashboard_inquiries' %}" class="nav-item"><span class="nav-icon">I</span> Inquiries</a>
+            <a href="{% url 'dashboard_analytics' %}" class="nav-item"><span class="nav-icon">A</span> Analytics</a>
         </nav>
 
         <div class="sidebar-bottom">
@@ -75,7 +75,7 @@
             <div class="dashboard-card">
                 <div class="card-header">
                     <div><p class="section-kicker">Customer growth</p><h2>Recent customers</h2><p>Latest accounts joining your store</p></div>
-                    <a href="#" class="view-link">View all <span>→</span></a>
+                    <a href="{% url 'dashboard_customers' %}" class="view-link">View all <span>→</span></a>
                 </div>
                 <div class="table-container">
                     <table>
@@ -98,7 +98,7 @@
             <div class="dashboard-card">
                 <div class="card-header">
                     <div><p class="section-kicker">Sales pipeline</p><h2>Recent inquiries</h2><p>Latest requests from customers</p></div>
-                    <a href="#" class="view-link">View all <span>→</span></a>
+                    <a href="{% url 'dashboard_inquiries' %}" class="view-link">View all <span>→</span></a>
                 </div>
                 <div class="table-container">
                     <table>

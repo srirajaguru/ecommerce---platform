@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | Sri Annai Precast</title>
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><div class="brand-mark">SA</div><div><h2>Sri Annai</h2><span>Precast admin</span></div></div>
+        <nav class="sidebar-nav" aria-label="Main navigation">
+            <p class="nav-label">Workspace</p>
+            <a href="{% url 'dashboard' %}" class="nav-item"><span class="nav-icon">D</span> Dashboard</a>
+            <a href="{% url 'dashboard_products' %}" class="nav-item active"><span class="nav-icon">P</span> Products</a>
+            <a href="{% url 'dashboard_customers' %}" class="nav-item"><span class="nav-icon">C</span> Customers</a>
+            <a href="{% url 'dashboard_inquiries' %}" class="nav-item"><span class="nav-icon">I</span> Inquiries</a>
+            <a href="{% url 'dashboard_analytics' %}" class="nav-item"><span class="nav-icon">A</span> Analytics</a>
+        </nav>
+        <div class="sidebar-bottom"><a href="{% url 'logout' %}" class="logout-btn"><span>↗</span> Log out</a></div>
+    </aside>
+    <main class="main-content">
+        <header class="top-header"><div><p class="eyebrow">Catalogue</p><h1>Products</h1><p class="header-copy">Review every product in your catalogue.</p></div><a href="{% url 'dashboard_product_add' %}" class="dashboard-action">Add product <span>+</span></a></header>
+        <section class="dashboard-card"><div class="card-header"><div><p class="section-kicker">Inventory</p><h2>All products</h2></div><a href="{% url 'dashboard_product_add' %}" class="view-link">Add product <span>+</span></a></div><div class="table-container"><table><thead><tr><th>Product</th><th>Code</th><th>Price</th><th>Stock</th><th>Status</th></tr></thead><tbody>
+            {% for product in products %}<tr><td><strong>{{ product.name }}</strong></td><td>{{ product.product_code }}</td><td>{% if product.price %}₹{{ product.price|floatformat:2 }}{% else %}On request{% endif %}</td><td>{{ product.stock }}</td><td>{% if product.is_available %}<span class="status verified">Available</span>{% else %}<span class="status cancelled">Unavailable</span>{% endif %}</td></tr>{% empty %}<tr><td colspan="5" class="empty">No products yet.</td></tr>{% endfor %}
+        </tbody></table></div></section>
+    </main>
+</body>
+</html>

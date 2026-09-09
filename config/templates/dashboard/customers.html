@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers | Sri Annai Precast</title>
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><div class="brand-mark">SA</div><div><h2>Sri Annai</h2><span>Precast admin</span></div></div>
+        <nav class="sidebar-nav" aria-label="Main navigation"><p class="nav-label">Workspace</p>
+            <a href="{% url 'dashboard' %}" class="nav-item"><span class="nav-icon">D</span> Dashboard</a><a href="{% url 'dashboard_products' %}" class="nav-item"><span class="nav-icon">P</span> Products</a><a href="{% url 'dashboard_customers' %}" class="nav-item active"><span class="nav-icon">C</span> Customers</a><a href="{% url 'dashboard_inquiries' %}" class="nav-item"><span class="nav-icon">I</span> Inquiries</a><a href="{% url 'dashboard_analytics' %}" class="nav-item"><span class="nav-icon">A</span> Analytics</a>
+        </nav><div class="sidebar-bottom"><a href="{% url 'logout' %}" class="logout-btn"><span>↗</span> Log out</a></div>
+    </aside>
+    <main class="main-content"><header class="top-header"><div><p class="eyebrow">Customer growth</p><h1>Customers</h1><p class="header-copy">Review registered customer accounts and verification status.</p></div></header>
+        <section class="dashboard-card"><div class="card-header"><div><p class="section-kicker">Accounts</p><h2>All customers</h2></div></div><div class="table-container"><table><thead><tr><th>Customer</th><th>Email</th><th>Phone</th><th>Status</th><th>Joined</th></tr></thead><tbody>
+            {% for customer in customers %}<tr><td><div class="person-cell"><span class="table-avatar">{{ customer.username|first|upper }}</span><strong>{{ customer.username }}</strong></div></td><td>{{ customer.email }}</td><td>{{ customer.phone_no|default:'-' }}</td><td>{% if customer.is_email_verified %}<span class="status verified">Verified</span>{% else %}<span class="status pending">Pending</span>{% endif %}</td><td>{{ customer.date_joined|date:"d M Y" }}</td></tr>{% empty %}<tr><td colspan="5" class="empty">No customers yet.</td></tr>{% endfor %}
+        </tbody></table></div></section>
+    </main>
+</body>
+</html>
