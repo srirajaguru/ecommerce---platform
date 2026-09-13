@@ -23,12 +23,22 @@
                 <div class="cart-list">
                     {% for item in items %}
                         <div class="cart-row">
-                            <div><h2><a href="{% url 'product:detail' item.product.id %}">{{ item.product.name }}</a></h2><p>{{ item.product.product_code }} · Quantity {{ item.quantity }}</p></div>
+                            <div><h2><a href="{% url 'product:detail' item.product.id %}">{{ item.product.name }}</a></h2><p>{{ item.product.product_code }} · {{ item.product.stock }} available</p></div>
                             <strong>{% if item.product.price %}₹{{ item.product.price|floatformat:2 }}{% else %}Price on request{% endif %}</strong>
+                            <form method="post" action="{% url 'cart:update_item' item.id %}">
+                                {% csrf_token %}
+                                <label>Quantity <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="{{ item.product.stock }}"></label>
+                                <button type="submit">Update</button>
+                            </form>
+                            <form method="post" action="{% url 'cart:remove_item' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Remove</button>
+                            </form>
                         </div>
                     {% endfor %}
                 </div>
                 <p class="cart-note">We will confirm availability, delivery, and final pricing with you before processing the order.</p>
+                <a class="button button-primary" href="{% url 'order:checkout' %}">Continue to checkout <span aria-hidden="true">&#8594;</span></a>
             {% else %}
                 <p class="empty-products">Your cart is empty.</p>
             {% endif %}

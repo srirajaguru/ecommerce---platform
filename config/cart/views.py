@@ -90,3 +90,45 @@ def cart_detail(request):
 			'items': items,
 		}
 	)
+
+
+@login_required(login_url='login')
+def update_cart_item(request, item_id):
+	if request.method != 'POST':
+		return redirect('cart:detail')
+
+	item = get_object_or_404(
+		CartItem,
+		id=item_id,
+		cart__user=request.user,
+	)
+	try:
+		quantity = int(request.POST.get('quantity', 0))
+	except (TypeError, ValueError):
+		quantity = 0
+
+	if quantity <= 0:
+		item.delete()
+		messages.info(request, f'{item.product.name} was removed from your cart.')
+	elif quantity > item.product.stock:
+		messages.error(request, f'Only {item.product.stock} units of {item.product.name} are available.')
+	else:
+		item.quantity = quantity
+		item.save(update_fields=['quantity', 'updated_at'])
+		messages.success(request, 'Cart updated.')
+
+	return redirect('cart:detail')
+
+
+@login_required(login_url='login')
+def remove_from_cart(request, item_id):
+	if request.method == 'POST':
+		item = get_object_or_404(
+			CartItem,
+			id=item_id,
+			cart__user=request.user,
+		)
+		name = item.product.name
+		item.delete()
+		messages.info(request, f'{name} was removed from your cart.')
+	return redirect('cart:detail')
